@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazigh Verb Conjugator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .input-container {
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping for smaller screens */
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            display: flex;
+            align-items: center; /* Vertically center items */
+            width: 48%; /* Adjust as needed */
+            margin-bottom: 10px; /* Spacing between input groups */
+        }
+        .input-group label {
+            margin-right: 5px; /* Space between label and input */
+            white-space: nowrap; /* Prevent label wrapping*/
+        }
+
+        input[type="text"], select {
+            padding: 10px;
+            font-size: 16px;
+            flex-grow: 1; /* Allow input to take available space */
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: white;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .highlight {
+            color: red;
+            font-weight: bold;
+        }
+        .export-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .export-buttons button {
+            width: 32%;
+        }
+         /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .input-container {
+                flex-direction: column; /* Stack inputs vertically */
+            }
+            .input-group {
+                width: 100%; /* Full width on smaller screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Amazigh Verb Conjugator</h1>
+
+    <div class="input-container">
+        <div class="input-group">
+            <label for="urmirInput">ⵓⵔⵎⵉⵔ:</label>
+            <input type="text" id="urmirInput" placeholder="e.g., ⵖⵔ">
+        </div>
+        <div class="input-group">
+            <label for="verbType">Verb Type:</label>
+            <select id="verbType">
+                <option value="0">Manual Input</option>
+                <option value="1">Type 1</option>
+                <option value="2">Type 2</option>
+                <option value="3">Type 3</option>
+                <option value="4">Type 4</option>
+                <option value="5">Type 5</option>
+                <option value="6">Type 6</option>
+                <option value="7">Type 7</option>
+                <option value="8">Type 8</option>
+                <option value="9">Type 9</option>
+                <option value="10">Type 10</option>
+                <option value="11">Type 11</option>
+                <option value="12">Type 12</option>
+                <option value="13">Type 13</option>
+                <option value="14">Type 14</option>
+                <option value="15">Type 15</option>
+                <option value="16">Type 16</option>
+                <option value="17">Type 17</option>
+                <option value="18">Type 18</option>
+                <option value="19">Type 19</option>
+                <option value="20">Type 20</option>
+                <option value="21">Type 21</option>
+                <option value="22">Type 22</option>
+                <option value="23">Type 23</option>
+                <option value="24">Type 24</option>
+                <option value="25">Type 25</option>
+                <option value="26">Type 26</option>
+                <option value="27">Type 27</option>
+                <option value="28">Type 28</option>
+                <option value="29">Type 29</option>
+                <option value="30">Type 30</option>
+                <option value="31">Type 31</option>
+
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="usmidInput">ⵓⵙⵎⵉⴷ:</label>
+            <input type="text" id="usmidInput" placeholder="e.g., ⵖⵔⵉ/ⵖⵔⴰ">
+        </div>
+        <div class="input-group">
+            <label for="usmidAnabawInput">ⵓⵙⵎⵉⴷ ⴰⵏⴰⴱⴰⵡ:</label>
+            <input type="text" id="usmidAnabawInput" placeholder="e.g., ⵖⵔⵉ">
+        </div>
+        <div class="input-group">
+            <label for="arusmidInput">ⴰⵔⵓⵙⵎⵉⴷ:</label>
+            <input type="text" id="arusmidInput" placeholder="e.g., ⴰⵇⵇⵔⴰ">
+        </div>
+    </div>
+
+    <button onclick="generateVerbForms()">Generate Forms</button>
+    <button onclick="conjugateVerb()">ⵙⴼⵜⵉ</button>
+
+    <div id="results"></div>
+
+    <div class="export-buttons">
+        <button onclick="exportJSON()">Export JSON</button>
+        <button onclick="exportTXT()">Export TXT</button>
+        <button onclick="exportWordPerLine()">Export Word-per-line</button>
+    </div>
+
+    <script>
+        const tenses = ['ⵓⵔⵎⵉⵔ (ⴰⴷ.., ⵔⴰⴷ..)', 'ⵓⵙⵎⵉⴷ (..ⵢⴰⴷ)', 'ⵓⵙⵎⵉⴷ ⴰⵏⴰⴱⴰⵡ (ⵓⵔ ⵢⴰⴷ..)', 'ⴰⵔⵓⵙⵎⵉⴷ (ⵔⴰⴷ.., ⴰⴷ..)', 'ⴰⵏⴰⴹ', 'ⴰⵏⴰⴹ ⵓⵙⵙⵉⴷ'];
+        const pronouns = [
+            ['ⵏⴽⴽ', 'ⵏⴽⴽ'],
+            ['ⴽⵢⵢ', 'ⴽⵎⵎ'],
+            ['ⵏⵜⵜⴰ', 'ⵏⵜⵜⴰⵜ'],
+            ['ⵏⴽⴽⵏⵉ', 'ⵏⴽⴽⵏⵜⵉ'],
+            ['ⴽⵏⵏⵉ', 'ⴽⵏⵏⵉⵏⵜⵉ'],
+            ['ⵏⵉⵜⵏⵉ', 'ⵏⵉⵜⵏⵜⵉ']
+        ];
+        const anadPronouns = [
+            ['ⴽⵢⵢ', 'ⴽⵎⵎ'],
+            ['ⴽⵏⵏⵉ1', 'ⴽⵏⵏⵉⵏⵜⵉ1'],
+            ['ⴽⵏⵏⵉ2', 'ⴽⵏⵏⵉⵏⵜⵉ2']
+        ];
+
+        let conjugationResults = {};
+
+        function generateVerbForms() {
+            const ao = document.getElementById('urmirInput').value;
+            const type = parseInt(document.getElementById('verbType').value);
+
+            if (type === 0 || !ao) {
+                return; // Do nothing for manual input or if ao is empty
+            }
+
+           let acco, accoNeg, inacco;
+
+            switch (type) {
+                case 1:  // CCC, CCC, CCⵉC, ⵜⵜ-CCⴰC
+                  acco = ao;
+                  accoNeg = ao.substring(0, 2) + "ⵉ" + ao.substring(2);
+                  inacco = "ⵜⵜ" + ao.substring(0, 2) + "ⴰ" + ao.substring(2);
+                  break;
+                case 2: // <CC>C, <CC>C, <CC>ⵉC, ⵜⵜ-<CC>C
+                  acco = ao;
+                  accoNeg = ao.substring(0, ao.length -1) + "ⵉ" + ao.substring(ao.length -1);
+                  inacco = "ⵜⵜ" + ao;
+                  break;
+                case 3: // CCⵉ, CCⵉ, CCⵉ, CCⴰC
+                  acco = ao;
+                  accoNeg = ao;
+                  inacco = ao.substring(0, ao.length - 1) + "ⴰ" + ao.substring(ao.length-1);
+                  break;
+                case 4: // CCC, CCC, CCⵉC, C<CC>C
+                  acco = ao;
+                  accoNeg = ao.substring(0, 2) + "ⵉ" + ao.substring(2);
+                  inacco = ao.substring(0, 1) + ao.substring(1,3) + ao.substring(3);
+                  break;
+                case 5: // <CC>ⵓ<CC>C, <CC>ⵓ<CC>C, <CC>ⵓ<CC>ⵉC, ⵜⵜ-Cⵓ<CC>ⵓC
+                  acco = ao;
+                  accoNeg = ao.substring(0, ao.length -1) + "ⵉ" + ao.substring(ao.length-1);
+                  inacco = "ⵜⵜ" + ao.substring(0,1) + "ⵓ" + ao.substring(1);
+                  break;
+                case 6: // CCCC, CCCC, CCCⵉC, ⵜⵜ-CCCⴰC
+                  acco = ao;
+                  accoNeg = ao.substring(0, 3) + "ⵉ" + ao.substring(3);
+                  inacco = "ⵜⵜ" + ao.substring(0, 3) + "ⴰ" + ao.substring(3);
+                  break;
+                case 7:  // CCⵓ<CC>C, CCⵓ<CC>C, CCⵓ<CC>ⵉC, CCⵓ<CC>ⵓC
+                  acco = ao;
+                  accoNeg = ao.substring(0, ao.length - 1) + "ⵉ" + ao.substring(ao.length - 1);
+                  inacco = ao;
+                  break;
+                case 8: // CCCⴰCⴰ, CCCⴰCⴰ, CCCⴰCⴰ, CCCⴰCⴰ
+                  acco = ao;
+                  accoNeg = ao;
+                  inacco = ao;
+                  break;
+                case 9: // ⵥⵥⵓ, ⵥⵥⵉ/ⴰ, ⵥⵥⵉ, ⵜⵜ-ⵥⵥⵓ
+                  acco = ao.substring(0, ao.length -1) + "ⵉ" + "/" + ao.substring(0, ao.length -1) + "ⴰ";
+                  accoNeg = ao.substring(0, ao.length -1) + "ⵉ";
+                  inacco = "ⵜⵜ" + ao;
+                  break;
+                case 10:// <CC>ⵉCC, <CC>ⵉCC, <CC>ⵉCⵉC, <CC>ⵉCⵉC
+                    acco = ao;
+                    accoNeg = ao.substring(0,ao.length-2) + "ⵉ" + ao.substring(ao.length -2, ao.length -1) + "ⵉ" + ao.substring(ao.length -1);
+                    inacco = accoNeg;
+                    break;
+
+                case 11: // ⴰCC, ⵓCC, ⵓCⵉC, ⵜⵜ-ⴰCC
+                    acco = "ⵓ" + ao.substring(1);
+                    accoNeg = "ⵓ" + ao.substring(1, 2) + "ⵉ" + ao.substring(2);
+                    inacco = "ⵜⵜ" + ao;
+                    break;
+                case 12: // CCⵓ, CCⵉ/ⴰ, CCⵉ, C<CC>ⵓ
+                    acco = ao.substring(0, ao.length - 1) + "ⵉ/" + ao.substring(0, ao.length - 1) + "ⴰ";
+                    accoNeg = ao.substring(0, ao.length - 1) + "ⵉ";
+                    inacco = ao.substring(0, 1) + ao.substring(1, ao.length -1) + ao.substring(ao.length -1);
+                    break;
+                case 13: // <CC>CCⵓ, <CC>CCⵉ/ⴰ, <CC>CCⵉ, <CC>CCⵓ
+                    acco = ao.substring(0, ao.length - 1) + "ⵉ/" + ao.substring(0, ao.length - 1) + "ⴰ";
+                    accoNeg = ao.substring(0, ao.length - 1) + "ⵉ";
+                    inacco = ao;
+                  break;
+                case 14:// CC, CCⵉ/ⴰ, CCⵉ, C<CC>ⴰ
+                    acco = ao.substring(0, ao.length) + "ⵉ/" + ao.substring(0, ao.length) + "ⴰ";
+                    accoNeg = ao.substring(0, ao.length) + "ⵉ";
+                    inacco = ao.substring(0,1) + ao.substring(1) + "ⴰ" ;
+                  break;
+                case 15:// <CC>CCⵓ, <CC>CCⵉ/ⴰ, <CC>CCⵉ, <CC>CCⴰC
+                    acco = ao.substring(0, ao.length - 1) + "ⵉ/" + ao.substring(0, ao.length - 1) + "ⴰ";
+                    accoNeg = ao.substring(0, ao.length - 1) + "ⵉ";
+                    inacco = ao.substring(0, ao.length-1) + "ⴰ" + ao.substring(ao.length-1);
+                  break;
+                case 16:// CCⵓC, C<CC>ⵓC, C<CC>ⵓC, ⵜⵜ-<CC>CCⵓC
+                    acco = ao.substring(0,1) + "<" + ao.substring(1, ao.length-1) + ">" + ao.substring(ao.length-1);
+                    accoNeg = acco;
+                    inacco = "ⵜⵜ" + ao.substring(0, ao.length-2) + ao.substring(ao.length-2);
+                  break;
+                case 17: // <CC>ⵉC, <CC>ⵉC, <CC>ⵉC, ⵜⵜ-<CC>ⵉC
+                    acco = ao;
+                    accoNeg = ao;
+                    inacco = "ⵜⵜ" + ao;
+                    break;
+                case 18:// ⵉCCⵉC, CCⵉC, CCⵉC, ⵜⵜ-ⵉCCⵉC
+                    acco = ao.substring(1);
+                    accoNeg = ao.substring(1);
+                    inacco = "ⵜⵜ" + ao;
+                  break;
+                case 19: // <CC>ⵉCC, <CC>ⵉCC, <CC>ⵉCC, <CC>ⴰCⴰC
+                    acco = ao;
+                    accoNeg = ao;
+                    inacco = ao.substring(0,ao.length-2) + "ⴰ" + ao.substring(ao.length -2, ao.length -1) + "ⴰ" + ao.substring(ao.length -1);
+                  break;
+                case 20: // CC, CCⵉ/ⴰ, CCⵉ, <CC>ⴰC
+                  acco = ao + "ⵉ/" + ao + "ⴰ";
+                  accoNeg = ao + "ⵉ";
+                  inacco = + ao + "ⴰ" + ao.substring(ao.length -1);
+                  break;
+                case 21: // C<CC>, C<CC>ⵉ/ⴰ, C<CC>ⵉ, ⵜⵜ-C<CC>ⴰ
+                  acco = ao + "ⵉ/" + ao + "ⴰ";
+                  accoNeg = ao + "ⵉ";
+                  inacco = "ⵜⵜ" + ao + "ⴰ";
+                  break;
+                case 22:// <CC>CC, <CC>CCⵉ, <CC>CCⵉ, <CC>CCⴰ
+                  acco = ao + "ⵉ";
+                  accoNeg = ao + "ⵉ";
+                  inacco = ao + "ⴰ";
+                  break;
+                case 23:  // CC, CC, CⵉC, <CC>ⴰC
+                  acco = ao;
+                  accoNeg = ao.substring(0, 1) + "ⵉ" + ao.substring(1);
+                  inacco = + ao + "ⴰ" + ao.substring(ao.length-1);
+                  break;
+                case 24:// ⴰC, ⵓCⵉ/ⴰ, ⵓCⵉ, ⵜⵜ-ⴰCⴰ
+                  acco = "ⵓ" + ao.substring(1) + "ⵉ/" + "ⵓ" + ao.substring(1) + "ⴰ";
+                  accoNeg = "ⵓ" + ao.substring(1) + "ⵉ";
+                  inacco = "ⵜⵜ" + ao + "ⴰ";
+                  break;
+                case 25: // Cⵥⵥ, Cⵥⵥ, Cⵥⵥ, Cⵥⵥⴰ
+                  acco = ao;
+                  accoNeg = ao;
+                  inacco = ao + "ⴰ";
+                  break;
+                case 26: // ⴰCⵓ, ⵓCⵉ, ⵓCⵉ, ⵜⵜ-ⴰCⵓ
+                  acco = "ⵓ" + ao.substring(1,2) + "ⵉ";
+                  accoNeg = "ⵓ" + ao.substring(1,2) + "ⵉ";
+                  inacco = "ⵜⵜ" + ao;
+                  break;
+                case 27:  // ⴰ<CC>C, ⵓ<CC>C, ⵓ<CC>ⵉC, ⵜⵜ-ⴰ<CC>ⴰC
+                  acco = "ⵓ" + ao.substring(1);
+                  accoNeg = "ⵓ" + ao.substring(1, ao.length-1) + "ⵉ" + ao.substring(ao.length - 1);
+                  inacco = "ⵜⵜ" + ao.substring(0, ao.length -1) + "ⴰ" + ao.substring(ao.length-1);
+                  break;
+                case 28:// <CC>ⴰ<CC>, <CC>ⵓ<CC>ⵉ/ⴰ, <CC>ⵓ<CC>ⵉ, ⵜⵜ-Cⴰ<CC>ⴰ
+                  acco = ao.substring(0, ao.length-2) + "ⵓ" + ao.substring(ao.length-2) + "ⵉ/" + ao.substring(0, ao.length-2) + "ⵓ" + ao.substring(ao.length-2) + "ⴰ";
+                  accoNeg = ao.substring(0, ao.length-2) + "ⵓ" + ao.substring(ao.length-2) + "ⵉ";
+                  inacco = "ⵜⵜ" + ao.substring(0,1) + "ⴰ" + ao.substring(1);
+                  break;
+                case 29:// ⵉCⵉ, <CC>ⵉ/ⴰ, <CC>ⵉ, ⵜⵜ-ⵉCⵉ
+                  acco = ao.substring(0,1) + ao.substring(2) + "ⵉ/" + ao.substring(0,1) +  ao.substring(2) + "ⴰ";
+                  accoNeg = ao.substring(0,1) + ao.substring(2) + "ⵉ";
+                  inacco = "ⵜⵜ" + ao;
+                  break;
+                case 30: // ⵉCⵉ, Cⵉ/ⴰ, Cⵉ, ⵜⵜ-ⵉCⵉ
+                  acco = ao.substring(1,2) + "ⵉ/" + ao.substring(1,2) + "ⴰ";
+                  accoNeg = ao.substring(1,2) + "ⵉ";
+                  inacco = "ⵜⵜ" + ao;
+                  break;
+                case 31: // C, Cⵉ/ⴰ, Cⵉ, ⵜⵜ-<CC>ⴰ
+                  acco = ao + "ⵉ/" + ao + "ⴰ";
+                  accoNeg = ao + "ⵉ";
+                  inacco = "ⵜⵜ" + ao + ao + "ⴰ";
+                  break;
+                default:
+                    acco = "";
+                    accoNeg = "";
+                    inacco = "";
+            }
+            document.getElementById('usmidInput').value = acco;
+            document.getElementById('usmidAnabawInput').value = accoNeg;
+            document.getElementById('arusmidInput').value = inacco;
+
+        }
+
+        function conjugateVerb() {
+            const urmirVerb = document.getElementById('urmirInput').value;
+            const usmidVerb = document.getElementById('usmidInput').value;
+            const usmidAnabawVerb = document.getElementById('usmidAnabawInput').value;
+            const arusmidVerb = document.getElementById('arusmidInput').value;
+
+            let results = '';
+            conjugationResults = {};
+
+            tenses.forEach((tense, index) => {
+                let verb;
+                if (index === 0 || index === 4) {
+                    verb = urmirVerb;
+                } else if (index === 1) {
+                    verb = usmidVerb;
+                } else if (index === 2) {
+                    verb = usmidAnabawVerb;
+                } else if (index === 3 || index === 5) {
+                    verb = arusmidVerb;
+                }
+
+                results += `<h2>${tense}</h2>`;
+                results += '<table>';
+                results += '<tr><th>ⴰⵎⴰⵢ</th><th>ⵓⵏⵜⵉ</th></tr>';
+
+                conjugationResults[tense] = {};
+
+                if (index === 4 || index === 5) {
+                    anadPronouns.forEach(([male, female], idx) => {
+                        const maleConjugation = conjugate(verb, male, tense, idx);
+                        const femaleConjugation = conjugate(verb, female, tense, idx);
+                        results += `<tr><td>${maleConjugation}</td><td>${femaleConjugation}</td></tr>`;
+                        conjugationResults[tense][male] = maleConjugation;
+                        conjugationResults[tense][female] = femaleConjugation;
+                    });
+                } else {
+                    pronouns.forEach(([male, female]) => {
+                        const maleConjugation = conjugate(verb, male, tense);
+                        const femaleConjugation = conjugate(verb, female, tense);
+                        results += `<tr><td>${maleConjugation}</td><td>${femaleConjugation}</td></tr>`;
+                        conjugationResults[tense][male] = maleConjugation;
+                        conjugationResults[tense][female] = femaleConjugation;
+                    });
+                }
+
+                results += '</table>';
+            });
+
+            document.getElementById('results').innerHTML = results;
+        }
+		
+		function conjugate(verb, pronoun, tense, idx) {
+    if (!verb) return '';
+
+    let conjugated = '';
+    const [verbForm1, verbForm2] = verb.split('\/');
+
+    // Choose which verb form to use based on the pronoun
+    let verbToUse;
+    if (verbForm2) {
+        if (['ⵏⴽⴽ', 'ⴽⵢⵢ', 'ⴽⵎⵎ'].includes(pronoun)) {
+            verbToUse = verbForm1;
+        } else {
+            verbToUse = verbForm2;
+        }
+    } else {
+        verbToUse = verbForm1;
+    }
+
+    if (tense === 'ⴰⵏⴰⴹ' || tense === 'ⴰⵏⴰⴹ ⵓⵙⵙⵉⴷ') {
+        // Rest of your existing imperative conjugation code
+        if (pronoun === 'ⵏⴽⴽ') {
+            conjugated = `${pronoun} ${verbToUse}`;
+        } else if (pronoun === 'ⴽⵢⵢ' || pronoun === 'ⴽⵎⵎ') {
+            conjugated = `${pronoun} <span>${verbToUse}</span>`;
+        } else if (pronoun === 'ⴽⵏⵏⵉ1' || pronoun === 'ⴽⵏⵏⵉⵏⵜⵉ1' || pronoun === 'ⴽⵏⵏⵉ2' || pronoun === 'ⴽⵏⵏⵉⵏⵜⵉ2') {
+            let suffix;
+            let ending = '';
+            if (idx === 1) { // First ⴽⵏⵏⵉ and ⴽⵏⵏⵉⵏⵜⵉ
+                suffix = pronoun.startsWith('ⴽⵏⵏⵉ1') ? 'ⵎ' : 'ⵎⵜ';
+            } else { // Second ⴽⵏⵏⵉ2 and ⴽⵏⵏⵉⵏⵜⵉ2
+                suffix = pronoun.startsWith('ⴽⵏⵏⵉ2') ? 'ⴰⵜ' : 'ⴰⵎⵜ';
+                ending = verbToUse.endsWith('ⴰ') ? 'ⵢ' : verbToUse.endsWith('ⵉ') ? 'ⵢ' : verbToUse.endsWith('ⵓ') ? 'ⵢ' : '';
+            }
+            conjugated = `${pronoun.replace(/[12]/, '')} ${verbToUse}${ending}<span class="highlight">${suffix}</span>`;
+        }
+    } else {
+        // Rest of your existing non-imperative conjugation code
+        let prefix = '';
+        let suffix = '';
+
+        switch (pronoun) {
+            case 'ⵏⴽⴽ':
+                suffix = 'ⵖ';
+                break;
+            case 'ⴽⵢⵢ':
+            case 'ⴽⵎⵎ':
+                prefix = 'ⵜ';
+                suffix = 'ⴷ';
+                break;
+            case 'ⵏⵜⵜⴰ':
+                prefix = 'ⵉ';
+                break;
+            case 'ⵏⵜⵜⴰⵜ':
+                prefix = 'ⵜ';
+                break;
+            case 'ⵏⴽⴽⵏⵉ':
+            case 'ⵏⴽⴽⵏⵜⵉ':
+                prefix = 'ⵏ';
+                break;
+            case 'ⴽⵏⵏⵉ':
+                prefix = 'ⵜ';
+                suffix = 'ⵎ';
+                break;
+            case 'ⴽⵏⵏⵉⵏⵜⵉ':
+                prefix = 'ⵜ';
+                suffix = 'ⵎⵜ';
+                break;
+            case 'ⵏⵉⵜⵏⵉ':
+                suffix = 'ⵏ';
+                break;
+            case 'ⵏⵉⵜⵏⵜⵉ':
+                suffix = 'ⵏⵜ';
+                break;
+        }
+
+        if (prefix === 'ⵜ' && verbToUse.startsWith('ⵜⵜⴻ')) {
+            prefix = '';
+        } else if (prefix === 'ⵜ' && verbToUse.startsWith('ⵜⵜ')) {
+            prefix = 'ⵜⴻ';
+        } else if (prefix === 'ⵉ' && ['ⵉ', 'ⴰ', 'ⵓ'].includes(verbToUse[0])) {
+            prefix = 'ⵢ';
+        }
+        else if (prefix === 'ⵏ' && verbToUse.startsWith('ⵏⵏ')) {
+            prefix = 'ⵏⴻ';
+        }
+
+        conjugated = `${pronoun} <span class="highlight">${prefix}</span>${verbToUse}<span class="highlight">${suffix}</span>`;
+
+        conjugated = conjugated.replace(/ⵜⴻⵜⵜⴻⵜⵜ/g, 'ⵜⵜⴻⵜⵜ');
+    }
+
+    return conjugated;
+}
+
+        function extractConjugatedWord(htmlString) {
+            const withoutPronoun = htmlString.substring(htmlString.indexOf(' ') + 1);
+            return withoutPronoun.replace(/<[^>]+>/g, '').trim();
+        }
+
+        function exportJSON() {
+            const jsonString = JSON.stringify(conjugationResults, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'amazigh_conjugations.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function exportTXT() {
+            let txtContent = '';
+            for (const [tense, pronouns] of Object.entries(conjugationResults)) {
+                txtContent += `${tense}\n`;
+                txtContent += '------------------------\n';
+                for (const [pronoun, conjugation] of Object.entries(pronouns)) {
+                    txtContent += `${pronoun}: ${conjugation.replace(/<[^>]+>/g, '')}\n`;
+                }
+                txtContent += '\n';
+            }
+            const blob = new Blob([txtContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'amazigh_conjugations.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function exportWordPerLine() {
+            let wordPerLineContent = '';
+            for (const [tense, pronouns] of Object.entries(conjugationResults)) {
+                for (const conjugation of Object.values(pronouns)) {
+                    const word = extractConjugatedWord(conjugation);
+                    if (word) {
+                        wordPerLineContent += `${word}\n`;
+                    }
+                }
+            }
+            const blob = new Blob([wordPerLineContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'amazigh_conjugations_word_per_line.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
