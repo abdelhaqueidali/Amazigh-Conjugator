@@ -189,6 +189,15 @@
             }
 
            let acco, accoNeg, inacco;
+		   
+		       // *** NEW: GENERALIZED VOWEL + ⵉ HANDLING ***
+    function replaceVowelI(str) {
+        if (!str) return str; // Handle empty or null strings
+        return str.replace(/([ⴰⵓⵉ])ⵉ/g, '$1ⵢ');
+    }
+
+    // Apply the replacement to the input verb *before* the switch
+    let processedAo = replaceVowelI(ao);
 
             switch (type) {
                 case 1:  // CCC, CCC, CCⵉC, ⵜⵜ-CCⴰC
@@ -352,6 +361,10 @@
                     accoNeg = "";
                     inacco = "";
             }
+			    acco = replaceVowelI(acco);
+				accoNeg = replaceVowelI(accoNeg);
+				inacco = replaceVowelI(inacco);
+	
             document.getElementById('usmidInput').value = acco;
             document.getElementById('usmidAnabawInput').value = accoNeg;
             document.getElementById('arusmidInput').value = inacco;
