@@ -103,37 +103,38 @@
             <label for="verbType">Verb Type:</label>
             <select id="verbType">
                 <option value="0">Manual Input</option>
-                <option value="1">Type 1 e.g., ⵔⵎⵙ</option>
-                <option value="2">Type 2 e.g., ⵟⵟⴼ</option>
-                <option value="3">Type 3 e.g., ⵙⵏⵉ</option>
-                <option value="4">Type 4 e.g., ⴳⵎⵔ</option>
-                <option value="5">Type 5  e.g., ⴷⴷⵓⴽⴽⵍ</option>
-                <option value="6">Type 6 e.g., ⴼⵔⴼⵔ</option>
-                <option value="7">Type 7 e.g., ⵙⴷⵓⵇⵇⵔ</option>
-                <option value="8">Type 8 e.g., ⵙⵎⵙⴰⵙⴰ</option>
-                <option value="9">Type 9 e.g., ⵥⵥⵓ</option>
-                <option value="10">Type 10 e.g., ⵙⵙⵉⵙⵏ</option>
-                <option value="11">Type 11 e.g., ⴰⴳⵔ</option>
-                <option value="12">Type 12 e.g., ⴳⵏⵓ</option>
-                <option value="13">Type 13 e.g., ⵙⵙⵏⴷⵓ</option>
-                <option value="14">Type 14 e.g., ⵍⵙ</option>
-                <option value="15">Type 15 e.g., ⵙⵙⴼⵔⵓ</option>
-                <option value="16">Type 16 e.g., ⴼⵙⵓⵙ</option>
-                <option value="17">Type 17 e.g., ⵇⵇⵉⵎ</option>
-                <option value="18">Type 18 e.g., ⵉⵙⴷⵉⴷ</option>
-                <option value="19">Type 19 e.g., ⵙⵙⵉⵡⴹ</option>
-                <option value="20">Type 20 e.g., ⵎⵍ</option>
-                <option value="21">Type 21 e.g., ⵙⵍⵍ</option>
-                <option value="22">Type 22 e.g., ⵙⵙⵍⵙ</option>
-                <option value="23">Type 23 e.g., ⴳⵏ</option>
-                <option value="24">Type 24 e.g., ⴰⴼ</option>
-                <option value="25">Type 25 e.g., ⴳⵥⵥ</option>
-                <option value="26">Type 26 e.g., ⴰⴹⵓ</option>
-                <option value="27">Type 27 ⴰⵣⵣⵍ</option>
-                <option value="28">Type 28 e.g., ⴳⴳⴰⵍⵍ</option>
-                <option value="29">Type 29 e.g., ⵉⵏⵉ</option>
-                <option value="30">Type 30 e.g., ⵉⵔⵉ</option>
-                <option value="31">Type 31 e.g., ⴳ or ⴳⴳ</option>
+                <option value="1">Type 1</option>
+                <option value="2">Type 2</option>
+                <option value="3">Type 3</option>
+                <option value="4">Type 4</option>
+                <option value="5">Type 5</option>
+                <option value="6">Type 6</option>
+                <option value="7">Type 7</option>
+                <option value="8">Type 8</option>
+                <option value="9">Type 9</option>
+                <option value="10">Type 10</option>
+                <option value="11">Type 11</option>
+                <option value="12">Type 12</option>
+                <option value="13">Type 13</option>
+                <option value="14">Type 14</option>
+                <option value="15">Type 15</option>
+                <option value="16">Type 16</option>
+                <option value="17">Type 17</option>
+                <option value="18">Type 18</option>
+                <option value="19">Type 19</option>
+                <option value="20">Type 20</option>
+                <option value="21">Type 21</option>
+                <option value="22">Type 22</option>
+                <option value="23">Type 23</option>
+                <option value="24">Type 24</option>
+                <option value="25">Type 25</option>
+                <option value="26">Type 26</option>
+                <option value="27">Type 27</option>
+                <option value="28">Type 28</option>
+                <option value="29">Type 29</option>
+                <option value="30">Type 30</option>
+                <option value="31">Type 31</option>
+
             </select>
         </div>
         <div class="input-group">
@@ -179,196 +180,392 @@
 
         let conjugationResults = {};
 
-        function generateVerbForms() {
-            const ao = document.getElementById('urmirInput').value;
-            const type = parseInt(document.getElementById('verbType').value);
+function generateVerbForms() {
+    const ao = document.getElementById('urmirInput').value;
+    const type = parseInt(document.getElementById('verbType').value);
 
-            if (type === 0 || !ao) {
-                return; // Do nothing for manual input or if ao is empty
-            }
+    if (type === 0 || !ao) {
+        return; // Do nothing for manual input or if ao is empty
+    }
 
-           let acco, accoNeg, inacco;
-		   
-		       // *** NEW: GENERALIZED VOWEL + ⵉ HANDLING ***
+    let acco, accoNeg, inacco;
+    
+    // Handle vowel + ⵉ combinations (change to vowel + ⵢ)
     function replaceVowelI(str) {
-        if (!str) return str; // Handle empty or null strings
+        if (!str) return str;
         return str.replace(/([ⴰⵓⵉ])ⵉ/g, '$1ⵢ');
     }
 
-    // Apply the replacement to the input verb *before* the switch
-    let processedAo = replaceVowelI(ao);
-
-            switch (type) {
-                case 1:  // CCC, CCC, CCⵉC, ⵜⵜ-CCⴰC
-                  acco = ao;
-                  accoNeg = ao.substring(0, 2) + "ⵉ" + ao.substring(2);
-                  inacco = "ⵜⵜ" + ao.substring(0, 2) + "ⴰ" + ao.substring(2);
-                  break;
-                case 2: // <CC>C, <CC>C, <CC>ⵉC, ⵜⵜ-<CC>C
-                  acco = ao;
-                  accoNeg = ao.substring(0, ao.length -1) + "ⵉ" + ao.substring(ao.length -1);
-                  inacco = "ⵜⵜ" + ao;
-                  break;
-                case 3: // CCⵉ, CCⵉ, CCⵉ, CCⴰC
-                  acco = ao;
-                  accoNeg = ao;
-                  inacco = ao.substring(0, ao.length - 1) + "ⴰ" + ao.substring(ao.length-1);
-                  break;
-                case 4: // CCC, CCC, CCⵉC, C<CC>C
-                  acco = ao;
-                  accoNeg = ao.substring(0, 2) + "ⵉ" + ao.substring(2);
-                  inacco = ao.substring(0, 1) + ao.substring(1,3) + ao.substring(3);
-                  break;
-                case 5: // <CC>ⵓ<CC>C, <CC>ⵓ<CC>C, <CC>ⵓ<CC>ⵉC, ⵜⵜ-Cⵓ<CC>ⵓC
-                  acco = ao;
-                  accoNeg = ao.substring(0, ao.length -1) + "ⵉ" + ao.substring(ao.length-1);
-                  inacco = "ⵜⵜ" + ao.substring(0,1) + "ⵓ" + ao.substring(1);
-                  break;
-                case 6: // CCCC, CCCC, CCCⵉC, ⵜⵜ-CCCⴰC
-                  acco = ao;
-                  accoNeg = ao.substring(0, 3) + "ⵉ" + ao.substring(3);
-                  inacco = "ⵜⵜ" + ao.substring(0, 3) + "ⴰ" + ao.substring(3);
-                  break;
-                case 7:  // CCⵓ<CC>C, CCⵓ<CC>C, CCⵓ<CC>ⵉC, CCⵓ<CC>ⵓC
-                  acco = ao;
-                  accoNeg = ao.substring(0, ao.length - 1) + "ⵉ" + ao.substring(ao.length - 1);
-                  inacco = ao;
-                  break;
-                case 8: // CCCⴰCⴰ, CCCⴰCⴰ, CCCⴰCⴰ, CCCⴰCⴰ
-                  acco = ao;
-                  accoNeg = ao;
-                  inacco = ao;
-                  break;
-                case 9: // ⵥⵥⵓ, ⵥⵥⵉ/ⴰ, ⵥⵥⵉ, ⵜⵜ-ⵥⵥⵓ
-                  acco = ao.substring(0, ao.length -1) + "ⵉ" + "/" + ao.substring(0, ao.length -1) + "ⴰ";
-                  accoNeg = ao.substring(0, ao.length -1) + "ⵉ";
-                  inacco = "ⵜⵜ" + ao;
-                  break;
-                case 10:// <CC>ⵉCC, <CC>ⵉCC, <CC>ⵉCⵉC, <CC>ⵉCⵉC
-                    acco = ao;
-                    accoNeg = ao.substring(0,ao.length-2) + "ⵉ" + ao.substring(ao.length -2, ao.length -1) + "ⵉ" + ao.substring(ao.length -1);
-                    inacco = accoNeg;
-                    break;
-
-                case 11: // ⴰCC, ⵓCC, ⵓCⵉC, ⵜⵜ-ⴰCC
-                    acco = "ⵓ" + ao.substring(1);
-                    accoNeg = "ⵓ" + ao.substring(1, 2) + "ⵉ" + ao.substring(2);
-                    inacco = "ⵜⵜ" + ao;
-                    break;
-                case 12: // CCⵓ, CCⵉ/ⴰ, CCⵉ, C<CC>ⵓ
-                    acco = ao.substring(0, ao.length - 1) + "ⵉ/" + ao.substring(0, ao.length - 1) + "ⴰ";
-                    accoNeg = ao.substring(0, ao.length - 1) + "ⵉ";
-                    inacco = ao.substring(0, 1) + ao.substring(1, ao.length -1) + ao.substring(ao.length -1);
-                    break;
-                case 13: // <CC>CCⵓ, <CC>CCⵉ/ⴰ, <CC>CCⵉ, <CC>CCⵓ
-                    acco = ao.substring(0, ao.length - 1) + "ⵉ/" + ao.substring(0, ao.length - 1) + "ⴰ";
-                    accoNeg = ao.substring(0, ao.length - 1) + "ⵉ";
-                    inacco = ao;
-                  break;
-                case 14:// CC, CCⵉ/ⴰ, CCⵉ, C<CC>ⴰ
-                    acco = ao.substring(0, ao.length) + "ⵉ/" + ao.substring(0, ao.length) + "ⴰ";
-                    accoNeg = ao.substring(0, ao.length) + "ⵉ";
-                    inacco = ao.substring(0,1) + ao.substring(1) + "ⴰ" ;
-                  break;
-                case 15:// <CC>CCⵓ, <CC>CCⵉ/ⴰ, <CC>CCⵉ, <CC>CCⴰC
-                    acco = ao.substring(0, ao.length - 1) + "ⵉ/" + ao.substring(0, ao.length - 1) + "ⴰ";
-                    accoNeg = ao.substring(0, ao.length - 1) + "ⵉ";
-                    inacco = ao.substring(0, ao.length-1) + "ⴰ" + ao.substring(ao.length-1);
-                  break;
-                case 16:// CCⵓC, C<CC>ⵓC, C<CC>ⵓC, ⵜⵜ-<CC>CCⵓC
-                    acco = ao.substring(0,1) + "<" + ao.substring(1, ao.length-1) + ">" + ao.substring(ao.length-1);
-                    accoNeg = acco;
-                    inacco = "ⵜⵜ" + ao.substring(0, ao.length-2) + ao.substring(ao.length-2);
-                  break;
-                case 17: // <CC>ⵉC, <CC>ⵉC, <CC>ⵉC, ⵜⵜ-<CC>ⵉC
-                    acco = ao;
-                    accoNeg = ao;
-                    inacco = "ⵜⵜ" + ao;
-                    break;
-                case 18:// ⵉCCⵉC, CCⵉC, CCⵉC, ⵜⵜ-ⵉCCⵉC
-                    acco = ao.substring(1);
-                    accoNeg = ao.substring(1);
-                    inacco = "ⵜⵜ" + ao;
-                  break;
-                case 19: // <CC>ⵉCC, <CC>ⵉCC, <CC>ⵉCC, <CC>ⴰCⴰC
-                    acco = ao;
-                    accoNeg = ao;
-                    inacco = ao.substring(0,ao.length-2) + "ⴰ" + ao.substring(ao.length -2, ao.length -1) + "ⴰ" + ao.substring(ao.length -1);
-                  break;
-                case 20: // CC, CCⵉ/ⴰ, CCⵉ, <CC>ⴰC
-                  acco = ao + "ⵉ/" + ao + "ⴰ";
-                  accoNeg = ao + "ⵉ";
-                  inacco = + ao + "ⴰ" + ao.substring(ao.length -1);
-                  break;
-                case 21: // C<CC>, C<CC>ⵉ/ⴰ, C<CC>ⵉ, ⵜⵜ-C<CC>ⴰ
-                  acco = ao + "ⵉ/" + ao + "ⴰ";
-                  accoNeg = ao + "ⵉ";
-                  inacco = "ⵜⵜ" + ao + "ⴰ";
-                  break;
-                case 22:// <CC>CC, <CC>CCⵉ, <CC>CCⵉ, <CC>CCⴰ
-                  acco = ao + "ⵉ";
-                  accoNeg = ao + "ⵉ";
-                  inacco = ao + "ⴰ";
-                  break;
-                case 23:  // CC, CC, CⵉC, <CC>ⴰC
-                  acco = ao;
-                  accoNeg = ao.substring(0, 1) + "ⵉ" + ao.substring(1);
-                  inacco = + ao + "ⴰ" + ao.substring(ao.length-1);
-                  break;
-                case 24:// ⴰC, ⵓCⵉ/ⴰ, ⵓCⵉ, ⵜⵜ-ⴰCⴰ
-                  acco = "ⵓ" + ao.substring(1) + "ⵉ/" + "ⵓ" + ao.substring(1) + "ⴰ";
-                  accoNeg = "ⵓ" + ao.substring(1) + "ⵉ";
-                  inacco = "ⵜⵜ" + ao + "ⴰ";
-                  break;
-                case 25: // Cⵥⵥ, Cⵥⵥ, Cⵥⵥ, Cⵥⵥⴰ
-                  acco = ao;
-                  accoNeg = ao;
-                  inacco = ao + "ⴰ";
-                  break;
-                case 26: // ⴰCⵓ, ⵓCⵉ, ⵓCⵉ, ⵜⵜ-ⴰCⵓ
-                  acco = "ⵓ" + ao.substring(1,2) + "ⵉ";
-                  accoNeg = "ⵓ" + ao.substring(1,2) + "ⵉ";
-                  inacco = "ⵜⵜ" + ao;
-                  break;
-                case 27:  // ⴰ<CC>C, ⵓ<CC>C, ⵓ<CC>ⵉC, ⵜⵜ-ⴰ<CC>ⴰC
-                  acco = "ⵓ" + ao.substring(1);
-                  accoNeg = "ⵓ" + ao.substring(1, ao.length-1) + "ⵉ" + ao.substring(ao.length - 1);
-                  inacco = "ⵜⵜ" + ao.substring(0, ao.length -1) + "ⴰ" + ao.substring(ao.length-1);
-                  break;
-                case 28:// <CC>ⴰ<CC>, <CC>ⵓ<CC>ⵉ/ⴰ, <CC>ⵓ<CC>ⵉ, ⵜⵜ-Cⴰ<CC>ⴰ
-                  acco = ao.substring(0, ao.length-2) + "ⵓ" + ao.substring(ao.length-2) + "ⵉ/" + ao.substring(0, ao.length-2) + "ⵓ" + ao.substring(ao.length-2) + "ⴰ";
-                  accoNeg = ao.substring(0, ao.length-2) + "ⵓ" + ao.substring(ao.length-2) + "ⵉ";
-                  inacco = "ⵜⵜ" + ao.substring(0,1) + "ⴰ" + ao.substring(1);
-                  break;
-                case 29:// ⵉCⵉ, <CC>ⵉ/ⴰ, <CC>ⵉ, ⵜⵜ-ⵉCⵉ
-                  acco = ao.substring(0,1) + ao.substring(2) + "ⵉ/" + ao.substring(0,1) +  ao.substring(2) + "ⴰ";
-                  accoNeg = ao.substring(0,1) + ao.substring(2) + "ⵉ";
-                  inacco = "ⵜⵜ" + ao;
-                  break;
-                case 30: // ⵉCⵉ, Cⵉ/ⴰ, Cⵉ, ⵜⵜ-ⵉCⵉ
-                  acco = ao.substring(1,2) + "ⵉ/" + ao.substring(1,2) + "ⴰ";
-                  accoNeg = ao.substring(1,2) + "ⵉ";
-                  inacco = "ⵜⵜ" + ao;
-                  break;
-                case 31: // C, Cⵉ/ⴰ, Cⵉ, ⵜⵜ-<CC>ⴰ
-                  acco = ao + "ⵉ/" + ao + "ⴰ";
-                  accoNeg = ao + "ⵉ";
-                  inacco = "ⵜⵜ" + ao + ao + "ⴰ";
-                  break;
-                default:
-                    acco = "";
-                    accoNeg = "";
-                    inacco = "";
-            }
-			    acco = replaceVowelI(acco);
-				accoNeg = replaceVowelI(accoNeg);
-				inacco = replaceVowelI(inacco);
-	
-            document.getElementById('usmidInput').value = acco;
-            document.getElementById('usmidAnabawInput').value = accoNeg;
-            document.getElementById('arusmidInput').value = inacco;
-
+    // Special function to handle doubled consonants
+    function preserveDoubledLetters(original, modified, position) {
+        if (position >= original.length) return modified;
+        
+        // Check if there's a doubled letter at the position
+        if (position + 1 < original.length && original[position] === original[position + 1]) {
+            // Ensure the doubled letter is preserved in the modified string
+            return modified.substring(0, position) + original[position] + original[position] + modified.substring(position + 2);
         }
+        return modified;
+    }
+
+    switch (type) {
+			//1
+//ao : ⵔⵎⵙ
+//acco : ⵔⵎⵙ
+//acco neg : ⵔⵎⵉⵙ
+//inacco : ⵜⵜ-ⵔⵎⴰⵙ
+        case 1:  // CCC, CCC, CCⵉC, ⵜⵜ-CCⴰC
+            acco = ao;
+            accoNeg = ao.substring(0, ao.length - 1) + "ⵉ" + ao.substring(ao.length - 1);
+            inacco = "ⵜⵜ-" + ao.substring(0, ao.length - 1) + "ⴰ" + ao.substring(ao.length - 1);
+            break;
+			
+			//2
+//ao : ⵟⵟⴼ
+//acco : ⵟⵟⴼ
+//acco neg : ⵟⵟⵉⴼ
+//inacco : ⵜⵜ-ⵟⵟⴼ
+        case 2: // ⵟⵟⴼ type - preserve doubled initial consonants
+            acco = ao;
+            accoNeg = ao.substring(0, ao.length - 1) + "ⵉ" + ao.substring(ao.length - 1);
+            inacco = "ⵜⵜ-" + ao;
+            break;
+			
+			//3
+//ao : ⵙⵏⵉ
+//acco : ⵙⵏⵉ
+//acco neg : ⵙⵏⵉ
+//inacco : ⵙⵏⴰⵢ
+        case 3: // CCⵉ, CCⵉ, CCⵉ, CCⴰC
+            acco = ao;
+            accoNeg = ao;
+            inacco = ao.substring(0, ao.length - 1) + "ⴰ" + "ⵢ";
+            break;
+			
+			//4
+//ao : ⴳⵎⵔ
+//acco : ⴳⵎⵔ
+//acco neg : ⴳⵎⵉⵔ
+//inacco : ⴳⵎⵎⵔ
+        case 4: // ⴳⵎⵔ type - double the middle consonant in inacco
+            acco = ao;
+            accoNeg = ao.substring(0, ao.length - 1) + "ⵉ" + ao.substring(ao.length - 1);
+            inacco = ao.substring(0, 1) + ao.substring(1, 2) + ao.substring(1, 2) + ao.substring(2);
+            break;
+			
+			//5
+//ao : ⴷⴷⵓⴽⴽⵍ
+//acco : ⴷⴷⵓⴽⴽⵍ
+//acco neg : ⴷⴷⵓⴽⴽⵉⵍ
+//inacco : ⵜⵜ-ⴷⵓⴽⴽⵓⵍ
+        case 5: // ⴷⴷⵓⴽⴽⵍ type - preserve doubled consonants
+            acco = ao;
+            accoNeg = ao.substring(0, ao.length - 1) + "ⵉ" + ao.substring(ao.length - 1);
+            inacco = "ⵜⵜ-" + ao.charAt(0) + ao.charAt(2) + ao.substring(3, ao.length - 1) + "ⵓ" + ao.substring(5);
+            break;
+			
+			//6
+//ao : ⴼⵔⴼⵔ
+//acco : ⴼⵔⴼⵔ
+//acco neg : ⴼⵔⴼⵉⵔ
+//inacco : ⵜⵜ-ⴼⵔⴼⴰⵔ
+        case 6: // ⴼⵔⴼⵔ type 
+            acco = ao;
+            accoNeg = ao.substring(0, ao.length - 1) + "ⵉ" + ao.substring(ao.length - 1);
+            inacco = "ⵜⵜ-" + ao.substring(0, ao.length - 1) + "ⴰ" + ao.substring(ao.length - 1);
+            break;
+			
+			//7
+//ao : ⵙⴷⵓⵇⵇⵔ
+//acco : ⵙⴷⵓⵇⵇⵔ
+//acco neg : ⵙⴷⵓⵇⵇⵉⵔ
+//inacco : ⵙⴷⵓⵇⵇⵓⵔ
+        case 7: // ⵙⴷⵓⵇⵇⵔ type - preserve doubled consonants
+            acco = ao;
+            accoNeg = ao.substring(0, ao.length - 1) + "ⵉ" + ao.substring(ao.length - 1);
+            inacco = ao.substring(0, ao.length - 1) + "ⵓ" + ao.substring(ao.length - 1);
+            break;
+			
+			//8
+//ao : ⵙⵎⵙⴰⵙⴰ 
+//acco : ⵙⵎⵙⴰⵙⴰ
+//acco neg : ⵙⵎⵙⴰⵙⴰ
+//inacco : ⵙⵎⵙⴰⵙⴰ
+        case 8: // ⵙⵎⵙⴰⵙⴰ type - no changes between forms
+            acco = ao;
+            accoNeg = ao;
+            inacco = ao;
+            break;
+			
+			//9
+//ao : ⵥⵥⵓ
+//acco : ⵥⵥⵉ/ⴰ
+//acco neg : ⵥⵥⵉ
+//inacco : ⵜⵜ-ⵥⵥⵓ
+        case 9: // ⵥⵥⵓ type
+            acco = ao.substring(0, ao.length - 1) + "ⵉ/" + ao.substring(0, ao.length - 1) + "ⴰ";
+            accoNeg = ao.substring(0, ao.length - 1) + "ⵉ";
+            inacco = "ⵜⵜ-" + ao;
+            break;
+			
+			//10
+//ao : ⵙⵙⵉⵙⵏ
+//acco : ⵙⵙⵉⵙⵏ
+//acco neg : ⵙⵙⵉⵙⵉⵏ
+//inacco : ⵙⵙⵉⵙⵉⵏ
+        case 10: // ⵙⵙⵉⵙⵏ type
+            acco = ao;
+            accoNeg = ao.substring(0, ao.length - 1) + "ⵉ" + ao.substring(ao.length - 1);
+            inacco = accoNeg;
+            break;
+			
+			//11
+//ao : ⴰⴳⵔ
+//acco : ⵓⴳⵔ
+//acco neg : ⵓⴳⵉⵔ
+//inacco : ⵜⵜ-ⴰⴳⵔ
+        case 11: // ⴰⴳⵔ type - ⴰ to ⵓ change
+            acco = "ⵓ" + ao.substring(1);
+            accoNeg = "ⵓ" + ao.substring(1, ao.length - 1) + "ⵉ" + ao.substring(ao.length - 1);
+            inacco = "ⵜⵜ-" + ao;
+            break;
+			
+			//12
+//ao : ⴳⵏⵓ
+//acco : ⴳⵏⵉ/ⴰ
+//acco neg : ⴳⵏⵉ
+//inacco : ⴳⵏⵏⵓ
+        case 12: // ⴳⵏⵓ type - doubled middle consonant
+            acco = ao.substring(0, ao.length - 1) + "ⵉ/" + ao.substring(0, ao.length - 1) + "ⴰ";
+            accoNeg = ao.substring(0, ao.length - 1) + "ⵉ";
+            inacco = ao.substring(0, 1) + ao.substring(1, 2) + ao.substring(1, 2) + ao.substring(2);
+            break;
+			
+			//13
+//ao : ⵙⵙⵏⴷⵓ
+//acco : ⵙⵙⵏⴷⵉ/ⴰ
+//acco neg : ⵙⵙⵏⴷⵉ
+//inacco : ⵙⵙⵏⴷⵓ
+        case 13: // ⵙⵙⵏⴷⵓ type
+            acco = ao.substring(0, ao.length - 1) + "ⵉ/" + ao.substring(0, ao.length - 1) + "ⴰ";
+            accoNeg = ao.substring(0, ao.length - 1) + "ⵉ";
+            inacco = ao;
+            break;
+			
+			//14
+//ao : ⵍⵙ
+//acco : ⵍⵙⵉ/ⴰ
+//acco neg : ⵍⵙⵉ
+//inacco : ⵍⵙⵙⴰ
+        case 14: // ⵍⵙ type - doubled final consonant
+            acco = ao + "ⵉ/" + ao + "ⴰ";
+            accoNeg = ao + "ⵉ";
+            inacco = ao.substring(0, 1) + ao.substring(1) + ao.substring(1) + "ⴰ";
+            break;
+			
+			//15
+//ao : ⵙⵙⴼⵔⵓ
+//acco : ⵙⵙⴼⵔⵉ/ⴰ
+//acco neg : ⵙⵙⴼⵔⵉ
+//inacco : ⵙⵙⴼⵔⴰⵡ
+        case 15: // ⵙⵙⴼⵔⵓ type - ⵓ to ⴰⵡ transformation
+            acco = ao.substring(0, ao.length - 1) + "ⵉ/" + ao.substring(0, ao.length - 1) + "ⴰ";
+            accoNeg = ao.substring(0, ao.length - 1) + "ⵉ";
+            inacco = ao.substring(0, ao.length - 1) + "ⴰ" + "ⵡ";
+            break;
+			
+			//16
+//ao : ⴼⵙⵓⵙ
+//acco : ⴼⵙⵙⵓⵙ
+//acco neg : ⴼⵙⵙⵓⵙ
+//inacco : ⵜⵜ-ⵜⵜⴼⵙⵓⵙ
+        case 16: // ⴼⵙⵓⵙ type
+            acco = ao.substring(0, 1) + ao.substring(1, 2) + ao.substring(1, 2) + ao.substring(2);
+            accoNeg = acco;
+            inacco = "ⵜⵜ-" + ao;
+            break;
+			
+			//17
+//ao : ⵇⵇⵉⵎ
+//acco : ⵇⵇⵉⵎ
+//acco neg : ⵇⵇⵉⵎ
+//inacco : ⵜⵜ-ⵇⵇⵉⵎ
+        case 17: // ⵇⵇⵉⵎ type - preserve doubled initial consonants
+            acco = ao;
+            accoNeg = ao;
+            inacco = "ⵜⵜ-" + ao;
+            break;
+			
+			//18
+//ao : ⵉⵙⴷⵉⴷ
+//acco : ⵙⴷⵉⴷ
+//acco neg : ⵙⴷⵉⴷ
+//inacco : ⵜⵜ-ⵉⵙⴷⵉⴷ
+        case 18: // ⵉⵙⴷⵉⴷ type - drop initial ⵉ
+            acco = ao.substring(1);
+            accoNeg = ao.substring(1);
+            inacco = "ⵜⵜ-" + ao;
+            break;
+			
+			//19
+//ao : ⵙⵙⵉⵡⴹ
+//acco : ⵙⵙⵉⵡⴹ
+//acco neg : ⵙⵙⵉⵡⴹ
+//inacco : ⵙⵙⴰⵡⴰⴹ
+        case 19: // ⵙⵙⵉⵡⴹ type - ⵉ to ⴰ transformation
+            acco = ao;
+            accoNeg = ao;
+			inacco = ao.substring(0, ao.length - 3) + "ⴰ" + ao.substring(ao.length - 2, ao.length - 1) + "ⴰ" + ao.substring(ao.length - 1);
+            break;
+			
+			//20
+//ao : ⵎⵍ
+//acco : ⵎⵍⵉ/ⴰ
+//acco neg : ⵎⵍⵉ 
+//inacco : ⵎⵎⴰⵍ
+        case 20: // ⵎⵍ type
+            acco = ao + "ⵉ/" + ao + "ⴰ";
+            accoNeg = ao + "ⵉ";
+            inacco = ao.charAt(0) + ao.charAt(0) + "ⴰ" + ao.substring(1);
+            break;
+			
+			//21
+//ao : ⵙⵍⵍ
+//acco : ⵙⵍⵍⵉ/ⴰ
+//acco neg : ⵙⵍⵍⵉ
+//inacco : ⵜⵜ-ⵙⵍⵍⴰ
+        case 21: // ⵙⵍⵍ type - preserve doubled consonants
+            acco = ao + "ⵉ/" + ao + "ⴰ";
+            accoNeg = ao + "ⵉ";
+            inacco = "ⵜⵜ-" + ao + "ⴰ";
+            break;
+			
+			//22
+//ao : ⵙⵙⵍⵙ
+//acco : ⵙⵙⵍⵙⵉ
+//acco neg : ⵙⵙⵍⵙⵉ
+//inacco : ⵙⵙⵍⵙⴰ
+        case 22: // ⵙⵙⵍⵙ type
+            acco = ao + "ⵉ";
+            accoNeg = ao + "ⵉ";
+            inacco = ao + "ⴰ";
+            break;
+			
+			//23
+//ao : ⴳⵏ
+//acco : ⴳⵏ
+//acco neg : ⴳⵉⵏ
+//inacco : ⴳⴳⴰⵏ
+        case 23: // ⴳⵏ type - double first consonant
+            acco = ao;
+            accoNeg = ao.substring(0, 1) + "ⵉ" + ao.substring(1);
+            inacco = ao.substring(0, 1) + ao.substring(0, 1) + "ⴰ" + ao.substring(1);
+            break;
+			
+			//24
+//ao : ⴰⴼ
+//acco : ⵓⴼⵉ/ⴰ
+//acco neg : ⵓⴼⵉ
+//inacco : ⵜⵜ-ⴰⴼⴰ
+        case 24: // ⴰⴼ type - ⴰ to ⵓ change
+            acco = "ⵓ" + ao.substring(1) + "ⵉ/" + "ⵓ" + ao.substring(1) + "ⴰ";
+            accoNeg = "ⵓ" + ao.substring(1) + "ⵉ";
+            inacco = "ⵜⵜ-" + ao + "ⴰ";
+            break;
+			
+			//25
+//ao : ⴳⵥⵥ
+//acco : ⴳⵥⵥ
+//acco neg : ⴳⵥⵥ
+//inacco : ⴳⵥⵥⴰ
+        case 25: // ⴳⵥⵥ type - preserve doubled consonants
+            acco = ao;
+            accoNeg = ao;
+            inacco = ao + "ⴰ";
+            break;
+			
+			//26
+//ao : ⴰⴹⵓ
+//acco : ⵓⴹⵉ
+//acco neg : ⵓⴹⵉ
+//inacco : ⵜⵜ-ⴰⴹⵓ
+        case 26: // ⴰⴹⵓ type - ⴰ to ⵓ change
+            acco = "ⵓ" + ao.substring(1, 2) + "ⵉ";
+            accoNeg = "ⵓ" + ao.substring(1, 2) + "ⵉ";
+            inacco = "ⵜⵜ-" + ao;
+            break;
+			
+			//27
+//ao : ⴰⵣⵣⵍ
+//acco : ⵓⵣⵣⵍ
+//acco neg : ⵓⵣⵣⵉⵍ
+//inacco : ⵜⵜ-ⴰⵣⵣⴰⵍ
+        case 27: // ⴰⵣⵣⵍ type - preserve doubled consonants
+            acco = "ⵓ" + ao.substring(1);
+            accoNeg = "ⵓ" + ao.substring(1, ao.length - 1) + "ⵉ" + ao.substring(ao.length - 1);
+            inacco = "ⵜⵜ-" + ao.substring(0, ao.length - 1) + "ⴰ" + ao.substring(ao.length - 1);
+            break;
+			
+			//28
+//ao : ⴳⴳⴰⵍⵍ
+//acco : ⴳⴳⵓⵍⵍⵉ/ⴰ
+//acco neg : ⴳⴳⵓⵍⵍⵉ
+//inacco : ⵜⵜ-ⴳⴰⵍⵍⴰ
+        case 28: // ⴳⴳⴰⵍⵍ type - preserve doubled consonants
+        acco = ao.substring(0, ao.length - 3) + "ⵓ" + ao.substring(ao.length - 2) + "ⵉ/" + ao.substring(0, ao.length - 3) + "ⵓ" + ao.substring(ao.length - 2) + "ⴰ";
+        accoNeg = ao.substring(0, ao.length - 3) + "ⵓ" + ao.substring(ao.length - 2) + "ⵉ";
+        inacco = "ⵜⵜ-" + ao.substring(0, 1) + ao.substring(2) + "ⴰ";
+            break;
+			
+			//29
+//ao : ⵉⵏⵉ
+//acco : ⵏⵏⵉ/ⴰ
+//acco neg : ⵏⵏⵉ
+//inacco : ⵜⵜ-ⵉⵏⵉ
+        case 29: // ⵉⵏⵉ type - dropping middle ⵉ
+            acco = ao.substring(1, 2) + ao.substring(1, 2) + "ⵉ/" + ao.substring(1, 2) + ao.substring(1, 2) + "ⴰ";
+            accoNeg = ao.substring(1, 2) + ao.substring(1, 2) + "ⵉ";
+            inacco = "ⵜⵜ-" + ao;
+            break;
+			
+			//30
+//ao : ⵉⵔⵉ
+//acco : ⵔⵉ/ⴰ
+//acco neg : ⵔⵉ
+//inacco : ⵜⵜ-ⵉⵔⵉ
+        case 30: // ⵉⵔⵉ type - drop initial ⵉ
+            acco = ao.substring(1, 2) + "ⵉ/" + ao.substring(1, 2) + "ⴰ";
+            accoNeg = ao.substring(1, 2) + "ⵉ";
+            inacco = "ⵜⵜ-" + ao;
+            break;
+            
+            //31
+//ao : ⴳ | ⴳⴳ
+//acco : ⴳⵉ/ⴰ | ⴳⴳⵉ/ⴰ
+//acco neg : ⴳⵉ | ⴳⴳⵉ
+//inacco : ⵜⵜ-ⴳⴳⴰ
+        case 31: // ⴳ type - single consonant
+            acco = ao + "ⵉ/" + ao + "ⴰ";
+            accoNeg = ao + "ⵉ";
+            //The way normally would work for inacco is:
+            //ⵜⵜ + ao + ⴰ but to make it work for double letter case it is mofified in the following for that :
+            inacco = "ⵜⵜ-" + ao.substring(0, 1) + ao.substring(0, 1) + "ⴰ";
+            break;
+        default:
+            acco = "";
+            accoNeg = "";
+            inacco = "";
+    }
+
+    // Apply vowel+ⵉ handling to all forms
+    acco = replaceVowelI(acco);
+    accoNeg = replaceVowelI(accoNeg);
+    inacco = replaceVowelI(inacco);
+
+    document.getElementById('usmidInput').value = acco;
+    document.getElementById('usmidAnabawInput').value = accoNeg;
+    document.getElementById('arusmidInput').value = inacco;
+}
 
         function conjugateVerb() {
             const urmirVerb = document.getElementById('urmirInput').value;
