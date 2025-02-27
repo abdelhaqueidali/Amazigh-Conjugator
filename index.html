@@ -253,6 +253,13 @@
             return withoutPronoun.replace(/<[^>]+>/g, '').trim();
         }
 
+
+        function extractConjugatedWordWithSpan(htmlString) {
+          // Only remove the pronoun part (everything before the first space)
+          const withoutPronoun = htmlString.substring(htmlString.indexOf(' ') + 1);
+          return withoutPronoun;
+        }
+
         function exportJSON() {
             const jsonString = JSON.stringify(conjugationResults, null, 2);
             const blob = new Blob([jsonString], { type: 'application/json' });
@@ -314,79 +321,78 @@
         
         
      function exportExcel() {
-    let excelData = [];
+        let excelData = [];
 
-    // --- 1. Build the Header Row ---
-    let headerRow = [];
-    tenses.forEach(tense => {
-        headerRow.push(tense);
-    });
-
-    // Add pronoun_tense combinations as columns (separate columns for male/female)
-    tenses.forEach(tense => {
-        let pronounSet = (tense === 'ⴰⵏⴰⴹ' || tense === 'ⴰⵏⴰⴹ ⵓⵙⵙⵉⴷ') ? anadPronouns : pronouns;
-        pronounSet.forEach(pronounPair => {
-            headerRow.push(`${pronounPair[0]}_${tense}`); // Male column
-            headerRow.push(`${pronounPair[1]}_${tense}`); // Female column
+        // --- 1. Build the Header Row ---
+        let headerRow = [];
+        tenses.forEach(tense => {
+            headerRow.push(tense);
         });
-    });
-    excelData.push(headerRow);
 
-    // --- 2. Build the Data Rows (One Row for Verb Forms) ---
-
-    // Get the verb inputs
-    const urmirVerb = document.getElementById('urmirInput').value;
-    const usmidVerb = document.getElementById('usmidInput').value;
-    const usmidAnabawVerb = document.getElementById('usmidAnabawInput').value;
-    const arusmidVerb = document.getElementById('arusmidInput').value;
-
-   // Create a single row for the base verbs.
-    let baseVerbRow = [];
-    tenses.forEach(tense => {
-        let verbForTense = '';
-        if (tense === 'ⵓⵔⵎⵉⵔ' || tense === 'ⴰⵏⴰⴹ') {
-            verbForTense = urmirVerb;
-        } else if (tense === 'ⵓⵙⵎⵉⴷ') {
-            verbForTense = usmidVerb;
-        } else if (tense === 'ⵓⵙⵎⵉⴷ ⴰⵏⴰⴱⴰⵡ') {
-            verbForTense = usmidAnabawVerb;
-        } else if (tense === 'ⴰⵔⵓⵙⵎⵉⴷ' || tense === 'ⴰⵏⴰⴹ ⵓⵙⵙⵉⴷ') {
-            verbForTense = arusmidVerb;
-        }
-        if (verbForTense) {
-            verbForTense = verbForTense.split('\\')[0];
-        }
-        baseVerbRow.push(verbForTense || '');
-    });
-
-    // --- 2b. Fill in the Pronoun_Tense Combination Columns ---
-    tenses.forEach(tense => {
-        let pronounSet = (tense === 'ⴰⵏⴰⴹ' || tense === 'ⴰⵏⴰⴹ ⵓⵙⵙⵉⴷ') ? anadPronouns : pronouns;
-        pronounSet.forEach(pronounPair => {
-            let malePronoun = pronounPair[0];
-            let femalePronoun = pronounPair[1];
-
-            // Get the conjugations, handling potential undefined values.
-            let maleConjugation = conjugationResults[tense]?.[malePronoun] ? extractConjugatedWord(conjugationResults[tense][malePronoun]) : '';
-            let femaleConjugation = conjugationResults[tense]?.[femalePronoun] ? extractConjugatedWord(conjugationResults[tense][femalePronoun]) : '';
-
-            baseVerbRow.push(maleConjugation);   // Push male conjugation
-            baseVerbRow.push(femaleConjugation);  // Push female conjugation
+        // Add pronoun_tense combinations as columns (separate columns for male/female)
+        tenses.forEach(tense => {
+            let pronounSet = (tense === 'ⴰⵏⴰⴹ' || tense === 'ⴰⵏⴰⴹ ⵓⵙⵙⵉⴷ') ? anadPronouns : pronouns;
+            pronounSet.forEach(pronounPair => {
+                headerRow.push(`${pronounPair[0]}_${tense}`); // Male column
+                headerRow.push(`${pronounPair[1]}_${tense}`); // Female column
+            });
         });
-    });
+        excelData.push(headerRow);
 
-    excelData.push(baseVerbRow); // Push the base verb row
+        // --- 2. Build the Data Rows (One Row for Verb Forms) ---
 
-    // --- 3. Create Worksheet and Workbook ---
-    const ws = XLSX.utils.aoa_to_sheet(excelData);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Conjugations");
-    XLSX.writeFile(wb, "amazigh_conjugations.xlsx");
-}
+        // Get the verb inputs
+        const urmirVerb = document.getElementById('urmirInput').value;
+        const usmidVerb = document.getElementById('usmidInput').value;
+        const usmidAnabawVerb = document.getElementById('usmidAnabawInput').value;
+        const arusmidVerb = document.getElementById('arusmidInput').value;
+
+       // Create a single row for the base verbs.
+        let baseVerbRow = [];
+        tenses.forEach(tense => {
+            let verbForTense = '';
+            if (tense === 'ⵓⵔⵎⵉⵔ' || tense === 'ⴰⵏⴰⴹ') {
+                verbForTense = urmirVerb;
+            } else if (tense === 'ⵓⵙⵎⵉⴷ') {
+                verbForTense = usmidVerb;
+            } else if (tense === 'ⵓⵙⵎⵉⴷ ⴰⵏⴰⴱⴰⵡ') {
+                verbForTense = usmidAnabawVerb;
+            } else if (tense === 'ⴰⵔⵓⵙⵎⵉⴷ' || tense === 'ⴰⵏⴰⴹ ⵓⵙⵙⵉⴷ') {
+                verbForTense = arusmidVerb;
+            }
+            if (verbForTense) {
+                verbForTense = verbForTense.split('/')[0];
+            }
+            baseVerbRow.push(verbForTense || '');
+        });
+
+        // --- 2b. Fill in the Pronoun_Tense Combination Columns ---
+        tenses.forEach(tense => {
+            let pronounSet = (tense === 'ⴰⵏⴰⴹ' || tense === 'ⴰⵏⴰⴹ ⵓⵙⵙⵉⴷ') ? anadPronouns : pronouns;
+            pronounSet.forEach(pronounPair => {
+                let malePronoun = pronounPair[0];
+                let femalePronoun = pronounPair[1];
+
+                // Get the conjugations, *keeping* the span tags.  Use the new function.
+                let maleConjugation = conjugationResults[tense]?.[malePronoun] ? extractConjugatedWordWithSpan(conjugationResults[tense][malePronoun]) : '';
+                let femaleConjugation = conjugationResults[tense]?.[femalePronoun] ? extractConjugatedWordWithSpan(conjugationResults[tense][femalePronoun]) : '';
+
+                baseVerbRow.push(maleConjugation);   // Push male conjugation
+                baseVerbRow.push(femaleConjugation);  // Push female conjugation
+            });
+        });
+
+        excelData.push(baseVerbRow); // Push the base verb row
+
+        // --- 3. Create Worksheet and Workbook ---
+        const ws = XLSX.utils.aoa_to_sheet(excelData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Conjugations");
+        XLSX.writeFile(wb, "amazigh_conjugations.xlsx");
+    }
 
         
         
     </script>
 </body>
 </html>
-
