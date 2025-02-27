@@ -162,7 +162,7 @@
             if (!verb) return '';
 
             let conjugated = '';
-            const [verbForm1, verbForm2] = verb.split('\\');
+            const [verbForm1, verbForm2] = verb.split('/');
 
             let verbToUse = verbForm1;
             if (verbForm2 && !['ⵏⴽⴽ', 'ⴽⵢⵢ', 'ⴽⵎⵎ'].includes(pronoun)) {
