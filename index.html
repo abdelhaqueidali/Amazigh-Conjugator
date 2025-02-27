@@ -90,7 +90,7 @@
             Example: ⵓⵔⵎⵉⵔ:ⵖⵔ</br>ⵓⵙⵎⵉⴷ:ⵖⵔⵉ\ⵖⵔⴰ</br>ⵓⵙⵎⵉⴷ ⴰⵏⴰⴱⴰⵡ:ⵖⵔⵉ</br>ⴰⵔⵓⵙⵎⵉⴷ:ⴰⵇⵇⵔⴰ
             </div>
     <script>
-        const tenses = ['ⵓⵔⵎⵉⵔ (ⴰⴷ.., ⵔⴰⴷ..)', 'ⵓⵙⵎⵉⴷ (..ⵢⴰⴷ)', 'ⵓⵙⵎⵉⴷ ⴰⵏⴰⴱⴰⵡ (ⵓⵔ ⵢⴰⴷ..)', 'ⴰⵔⵓⵙⵎⵉⴷ (ⵔⴰⴷ.., ⴰⴷ..)', 'ⴰⵏⴰⴹ', 'ⴰⵏⴰⴹ ⵓⵙⵙⵉⴷ'];
+        const tenses = ['ⵓⵔⵎⵉⵔ', 'ⵓⵙⵎⵉⴷ', 'ⵓⵙⵎⵉⴷ ⴰⵏⴰⴱⴰⵡ', 'ⴰⵔⵓⵙⵎⵉⴷ', 'ⴰⵏⴰⴹ', 'ⴰⵏⴰⴹ ⵓⵙⵙⵉⴷ'];
         const pronouns = [
             ['ⵏⴽⴽ', 'ⵏⴽⴽ'],
             ['ⴽⵢⵢ', 'ⴽⵎⵎ'],
@@ -344,13 +344,13 @@
     let baseVerbRow = [];
     tenses.forEach(tense => {
         let verbForTense = '';
-        if (tense === 'ⵓⵔⵎⵉⵔ (ⴰⴷ.., ⵔⴰⴷ..)' || tense === 'ⴰⵏⴰⴹ') {
+        if (tense === 'ⵓⵔⵎⵉⵔ' || tense === 'ⴰⵏⴰⴹ') {
             verbForTense = urmirVerb;
-        } else if (tense === 'ⵓⵙⵎⵉⴷ (..ⵢⴰⴷ)') {
+        } else if (tense === 'ⵓⵙⵎⵉⴷ') {
             verbForTense = usmidVerb;
-        } else if (tense === 'ⵓⵙⵎⵉⴷ ⴰⵏⴰⴱⴰⵡ (ⵓⵔ ⵢⴰⴷ..)') {
+        } else if (tense === 'ⵓⵙⵎⵉⴷ ⴰⵏⴰⴱⴰⵡ') {
             verbForTense = usmidAnabawVerb;
-        } else if (tense === 'ⴰⵔⵓⵙⵎⵉⴷ (ⵔⴰⴷ.., ⴰⴷ..)' || tense === 'ⴰⵏⴰⴹ ⵓⵙⵙⵉⴷ') {
+        } else if (tense === 'ⴰⵔⵓⵙⵎⵉⴷ' || tense === 'ⴰⵏⴰⴹ ⵓⵙⵙⵉⴷ') {
             verbForTense = arusmidVerb;
         }
         if (verbForTense) {
