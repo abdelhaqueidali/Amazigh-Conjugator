@@ -1,12 +1,44 @@
 # Amazigh-Conjugator
 Tool to conjugate Amazigh verbs in all modes, just provide the four forms of the verb
 <br>
-https://abdelhaqueidali.github.io/Amazigh-Conjugator/
+**[Try it Online!](https://abdelhaqueidali.github.io/Amazigh-Conjugator/)**
 <br>
-The Amazigh Verb Conjugator is a web-based tool designed to help users automatically conjugate verbs in the Amazigh (Berber) language. Instead of manually looking up conjugations in tables, you simply enter the verb's base forms in four provided fields (corresponding to different tense/aspect stems: Urmir, Usmid, Usmid Anabaw, and Arusmid), and the tool generates the complete conjugation table. It shows the conjugations for all six pronouns (both masculine and feminine forms) across several key tenses: Urmir, Usmid, Usmid Anabaw, Arusmid, Anad, and Anad Ussid. Crucially, the tool handles some of the complex morphophonological changes that occur in Amazigh verb conjugation, including prefix and suffix additions, and vowel changes. After conjugating, you can export the results in several formats: a structured JSON file, a plain text file (showing pronoun-conjugation pairs), a text file with one conjugated word per line, and a formatted Excel spreadsheet. The Excel export organizes the data with tenses and pronoun-tense combinations as columns, and a single row containing the base verb forms, with all their conjugations. The tool provides examples of the kind of input you have to use to make the conjugation easier. This is especially valuable for language learners and anyone needing quick and accurate Amazigh verb conjugations.
-<br>
-While helpful for any Amazigh verb conjugation, this tool is especially valuable for verbs missing from the Ircam Amsfti data. Its primary function can be to build a personal Excel-based dictionary of verb conjugations.
-<br>
-Le Conjugueur de Verbes Amazighs est un outil en ligne conçu pour aider les utilisateurs à conjuguer automatiquement les verbes en langue amazighe (berbère). Au lieu de chercher manuellement les conjugaisons dans des tableaux, il vous suffit d'entrer les formes de base du verbe dans quatre champs prévus (correspondant à différents radicaux de temps/aspect : Urmir, Usmid, Usmid Anabaw et Arusmid), et l'outil génère le tableau de conjugaison complet. Il affiche les conjugaisons pour les six pronoms (formes masculines et féminines) à travers plusieurs temps clés : Urmir, Usmid, Usmid Anabaw, Arusmid, Anad et Anad Ussid. Fondamentalement, l'outil gère certaines des modifications morphophonologiques complexes qui se produisent dans la conjugaison des verbes amazighs, y compris les ajouts de préfixes et de suffixes, et les changements de voyelles. Après la conjugaison, vous pouvez exporter les résultats dans plusieurs formats : un fichier JSON structuré, un fichier texte brut (montrant les paires pronom-conjugaison), un fichier texte avec un mot conjugué par ligne, et une feuille de calcul Excel formatée. L'exportation Excel organise les données avec les temps et les combinaisons pronom-temps en colonnes, et une seule ligne contenant les formes verbales de base, avec toutes leurs conjugaisons. L'outil fournit des exemples du type de saisie que vous devez utiliser pour faciliter la conjugaison. Ceci est particulièrement utile pour les apprenants de la langue et toute personne ayant besoin de conjugaisons de verbes amazighs rapides et précises.
-<br>
-Bien qu'utile pour toute conjugaison de verbe amazigh, cet outil est particulièrement précieux pour les verbes absents des données d'Amsfti de l'Ircam. Sa fonction principale peut être de construire un dictionnaire personnel de conjugaisons de verbes au format Excel.
+# Amazigh Verb Conjugator / Conjugueur de Verbes Amazighs
+
+[![Generic badge](https://img.shields.io/badge/Language-Amazigh-blue.svg)](https://en.wikipedia.org/wiki/Berber_languages) [![Generic badge](https://img.shields.io/badge/Status-Beta-yellow.svg)]()
+
+## English Description
+
+The Amazigh Verb Conjugator is a web-based tool designed to help users automatically conjugate verbs in the Amazigh (Berber) language. Instead of manually looking up conjugations in tables, you simply enter the verb's base forms in four provided fields (corresponding to different tense/aspect stems: Urmir, Usmid, Usmid Anabaw, and Arusmid), and the tool generates the complete conjugation table.
+
+**Features:**
+
+*   **Automatic Conjugation:**  Generates conjugations for all six pronouns (masculine and feminine) across key tenses:
+    *   Urmir
+    *   Usmid
+    *   Usmid Anabaw
+    *   Arusmid
+    *   Anad
+    *   Anad Ussid
+*   **Handles Morphophonological Changes:**  Correctly accounts for prefix/suffix additions and vowel changes.
+*   **Multiple Export Formats:**
+    *   Structured JSON
+    *   Plain text (pronoun-conjugation pairs)
+    *   Text file (one conjugated word per line)
+    *   Formatted Excel spreadsheet (organized by tense and pronoun). Excel format is the best choice, it is well organized and easy to use.
+*    **Example**: The tool provide an example containing a verb example to know how to use the tool.
+*   **Complements Ircam Amsfti:** Especially useful for conjugating verbs not found in the Ircam Amsfti database.
+*   **Dictionary Creation:** Facilitates building a personal Excel-based dictionary of verb conjugations.
+
+This tool is valuable for language learners and anyone needing quick and accurate Amazigh verb conjugations.
+
+## Usage
+
+1.  **Input:** Enter the verb's base forms in the four input fields (Urmir, Usmid, Usmid Anabaw, Arusmid).
+2.  **Conjugate:** Click the "ⵙⴼⵜⵉ" (Conjugate) button.
+3.  **View Results:** The conjugation table will appear below.
+4.  **Export:**  Choose your desired export format (JSON, TXT, Word-per-line TXT, Excel). Excel format is the best choice, it is well organized and easy to use.
+
+## Contributing / Contribution
+
+Contributions are welcome!  Please feel free to submit issues or pull requests.
