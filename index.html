@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ⵏ<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -91,9 +91,11 @@
             </div>
     <script>
         const tenses = ['ⵓⵔⵎⵉⵔ', 'ⵓⵙⵎⵉⴷ', 'ⵓⵙⵎⵉⴷ ⴰⵏⴰⴱⴰⵡ', 'ⴰⵔⵓⵙⵎⵉⴷ', 'ⴰⵏⴰⴹ', 'ⴰⵏⴰⴹ ⵓⵙⵙⵉⴷ'];
+        // Added ⴽⵢⵢ2 and ⴽⵎⵎ2 to the list
         const pronouns = [
             ['ⵏⴽⴽ', 'ⵏⴽⴽ'],
-            ['ⴽⵢⵢ', 'ⴽⵎⵎ'],
+            ['ⴽⵢⵢ', 'ⴽⵎⵎ'],       // Original (Uses ⵜ-ⴷ)
+            ['ⴽⵢⵢ2', 'ⴽⵎⵎ2'],     // New (Uses ⵜ-ⵜ)
             ['ⵏⵜⵜⴰ', 'ⵏⵜⵜⴰⵜ'],
             ['ⵏⴽⴽⵏⵉ', 'ⵏⴽⴽⵏⵜⵉ'],
             ['ⴽⵏⵏⵉ', 'ⴽⵏⵏⵉⵏⵜⵉ'],
@@ -165,7 +167,8 @@
             const [verbForm1, verbForm2] = verb.split('/');
 
             let verbToUse = verbForm1;
-            if (verbForm2 && !['ⵏⴽⴽ', 'ⴽⵢⵢ', 'ⴽⵎⵎ'].includes(pronoun)) {
+            // Check includes against base pronouns (removing the '2' suffix if present for the check)
+            if (verbForm2 && !['ⵏⴽⴽ', 'ⴽⵢⵢ', 'ⴽⵎⵎ', 'ⴽⵢⵢ2', 'ⴽⵎⵎ2'].includes(pronoun)) {
                 verbToUse = verbForm2;
             }
 
@@ -196,7 +199,12 @@
                     case 'ⴽⵢⵢ':
                     case 'ⴽⵎⵎ':
                         prefix = 'ⵜ';
-                        suffix = 'ⴷ';
+                        suffix = 'ⴷ'; // Original logic
+                        break;
+                    case 'ⴽⵢⵢ2':
+                    case 'ⴽⵎⵎ2':
+                        prefix = 'ⵜ';
+                        suffix = 'ⵜ'; // New logic for the second version
                         break;
                     case 'ⵏⵜⵜⴰ':
                         prefix = 'ⵉ';
@@ -231,12 +239,14 @@
                 } else if (prefix === 'ⵉ' && ['ⵉ', 'ⴰ', 'ⵓ'].includes(verbToUse[0])) {
                     prefix = 'ⵢ';
                 }
-              else if (prefix === 'ⵏ' && verbToUse.startsWith('ⵏⵏ')) {
-    // New rule: Add ⴻ when prefix ⵏ is added to a verb starting with ⵏⵏ
-    prefix = 'ⵏⴻ';
-}
+                else if (prefix === 'ⵏ' && verbToUse.startsWith('ⵏⵏ')) {
+                    prefix = 'ⵏⴻ';
+                }
 
-                conjugated = `${pronoun} <span class="highlight">${prefix}</span>${verbToUse}<span class="highlight">${suffix}</span>`;
+                // Remove the '2' from the pronoun when displaying
+                let displayPronoun = pronoun.replace('2', '');
+                
+                conjugated = `${displayPronoun} <span class="highlight">${prefix}</span>${verbToUse}<span class="highlight">${suffix}</span>`;
 
                 // Apply the ⵜⴻⵜⵜⴻⵜⵜ- -> ⵜⵜⴻⵜⵜ- correction
                 conjugated = conjugated.replace(/ⵜⴻⵜⵜⴻⵜⵜ/g, 'ⵜⵜⴻⵜⵜ');
@@ -316,10 +326,6 @@
             URL.revokeObjectURL(url);
         }
         
-        
-        
-        
-        
      function exportExcel() {
         let excelData = [];
 
@@ -391,8 +397,6 @@
         XLSX.writeFile(wb, "amazigh_conjugations.xlsx");
     }
 
-        
-        
     </script>
 </body>
 </html>
